@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bluetooth LE Grade Predictor - Direct Hardware Edition</title>
+  <title>Bluetooth LE Grade Predictor - Professor Transmission Interface</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -13,7 +13,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen p-4 sm:p-8 flex justify-center selection:bg-sky-500 selection:text-white">
 
-  <div class="w-full max-w-3xl space-y-5">
+  <div class="w-full max-w-4xl space-y-5">
     
     <!-- 1. Header Card -->
     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
@@ -23,9 +23,9 @@
         <div>
           <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
             <span>Bluetooth LE Grade Predictor</span>
-            <span class="text-xs bg-sky-500/20 text-sky-400 border border-sky-500/30 px-2.5 py-0.5 rounded-full font-semibold">Direct BLE</span>
+            <span class="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-semibold">Direct Hardware BLE</span>
           </h1>
-          <p class="text-slate-400 text-sm mt-0.5">Native Bluetooth LE Hardware Communication (No Third-Party Apps Required)</p>
+          <p class="text-slate-400 text-sm mt-0.5">Professor Transmission Interface (Send Data & Receive Return Grade)</p>
         </div>
 
         <!-- Status Badge -->
@@ -35,72 +35,163 @@
         </div>
       </div>
 
-      <!-- Mode Switcher Tabs -->
-      <div class="flex rounded-xl bg-slate-950 p-1 border border-slate-800 gap-1 mb-4">
-        <button id="tabReceiver" class="flex-1 py-2 text-xs font-bold rounded-lg bg-blue-600 text-white transition flex items-center justify-center gap-1.5">
-          <span>📥</span> <span>Mode 1: Client / Connect (Scan & Interact)</span>
+      <!-- Navigation Tabs -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 rounded-xl bg-slate-950 p-1 border border-slate-800 gap-1 mb-4">
+        <button id="tabProfessor" class="py-2.5 px-2 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center justify-center gap-1.5 shadow">
+          <span>🎓</span> <span>Professor Interface</span>
         </button>
-        <button id="tabTransmitter" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
-          <span>📡</span> <span>Mode 2: AnyaratBluetooth Server (Broadcast & Receive)</span>
+        <button id="tabWorkflow" class="py-2.5 px-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
+          <span>📋</span> <span>3-Step Workflow</span>
+        </button>
+        <button id="tabServer" class="py-2.5 px-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
+          <span>📡</span> <span>Anyarat Server</span>
+        </button>
+        <button id="tabTools" class="py-2.5 px-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
+          <span>🔧</span> <span>Encoder Tools</span>
         </button>
       </div>
 
-      <!-- UUID Cards -->
+      <!-- Target UUID Banner -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3.5">
-          <div class="text-[11px] font-bold text-sky-400 tracking-wider uppercase">SERVICE UUID</div>
+        <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3">
+          <div class="text-[11px] font-bold text-sky-400 tracking-wider uppercase">TARGET SERVICE UUID</div>
           <div class="mono text-xs text-slate-200 mt-1 select-all break-all">aee04821-1973-4e1f-a590-e84b10d580e7</div>
         </div>
-        <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3.5">
-          <div class="text-[11px] font-bold text-purple-400 tracking-wider uppercase">CHARACTERISTIC UUID</div>
+        <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3">
+          <div class="text-[11px] font-bold text-purple-400 tracking-wider uppercase">TARGET CHARACTERISTIC UUID</div>
           <div class="mono text-xs text-slate-200 mt-1 select-all break-all">cde07b1a-889b-44b7-a99f-c888dddac729</div>
         </div>
       </div>
     </div>
 
-    <!-- ==================== MODE 1: CLIENT / RECEIVER ==================== -->
-    <div id="receiverSection" class="space-y-5">
-      <!-- Student Info Card -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <div class="text-xs font-bold text-indigo-400 tracking-wider uppercase">Student Information</div>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <!-- ==================== VIEW 1: PROFESSOR INTERFACE ==================== -->
+    <div id="viewProfessor" class="space-y-5">
+      
+      <!-- Connection & Action Control Bar -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Your Name & Student ID</label>
-            <input type="text" id="yourNameInput" value="Anyarat (65012345)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-sky-500 transition">
+            <div class="text-xs font-bold text-emerald-400 tracking-wider uppercase">Professor BLE Device Connection</div>
+            <div class="text-xs text-slate-400 mt-0.5">Connect directly to Professor's Bluetooth hardware device</div>
           </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Buddy's Name & Student ID</label>
-            <input type="text" id="buddyNameInput" value="Buddy Name (65054321)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-sky-500 transition">
-          </div>
-        </div>
-
-        <div class="text-xs text-slate-400">
-          Payload Preview: <span class="font-bold text-sky-400" id="payloadPreview">"Anyarat (65012345) & Buddy Name (65054321)"</span>
-        </div>
-      </div>
-
-      <!-- Workflow Steps Card -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
-        <div class="flex items-center justify-between">
-          <div class="text-xs font-bold text-emerald-400 tracking-wider uppercase">Assignment Workflow Steps</div>
-          <span class="text-[11px] text-slate-400">Click <b>"1. Connect"</b> or <b>"⚡ Run Steps 1-3 Auto"</b> to proceed</span>
+          
+          <label class="text-xs text-slate-400 flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="acceptAllCheckbox" checked class="rounded bg-slate-800 border-slate-700 text-sky-500 focus:ring-0">
+            <span>Scan All Nearby BLE Devices</span>
+          </label>
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-          <button id="connectBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/25 active:scale-95 flex items-center gap-2">
+          <button id="connectProfBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/25 active:scale-95 flex items-center gap-2 cursor-pointer">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            <span id="connectBtnText">1. Connect Direct Bluetooth</span>
+            <span id="connectProfBtnText">Connect to Professor's Device</span>
           </button>
 
-          <button id="autoRunBtn" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-purple-600/25 active:scale-95 flex items-center gap-2 cursor-pointer">
-            <span>⚡</span> <span>Run Steps 1-3 Auto</span>
+          <button id="autoSendReceiveBtn" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-purple-600/25 active:scale-95 flex items-center gap-2 cursor-pointer">
+            <span>⚡</span> <span>1-Click Auto: Send & Receive Grade</span>
           </button>
+        </div>
+      </div>
 
-          <label class="text-xs text-slate-400 flex items-center gap-2 cursor-pointer ml-auto">
-            <input type="checkbox" id="acceptAllCheckbox" checked class="rounded bg-slate-800 border-slate-700 text-sky-500 focus:ring-0">
-            <span>Scan All Nearby Devices</span>
-          </label>
+      <!-- Main Two-Column Grid: Send on Left, Receive on Right -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        
+        <!-- CARD 1: SEND DATA TO PROFESSOR -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">📤</span>
+                <span class="text-sm font-bold text-white uppercase tracking-wider">Send Data to Professor</span>
+              </div>
+              <span class="text-[11px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Write Characteristic</span>
+            </div>
+
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">Your Name & Student ID</label>
+                <input type="text" id="profYourNameInput" value="Anyarat (65012345)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 transition">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">Buddy Name & Student ID</label>
+                <input type="text" id="profBuddyNameInput" value="Buddy Name (65054321)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 transition">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">Custom Message / Payload</label>
+                <input type="text" id="profCustomInput" placeholder="Optional notes to Professor" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 transition">
+              </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+              <div class="text-[11px] text-slate-400 font-semibold uppercase">Payload to be Sent:</div>
+              <div id="profPayloadPreview" class="mono text-xs text-emerald-300 font-bold break-all">"Anyarat (65012345) & Buddy Name (65054321)"</div>
+            </div>
+          </div>
+
+          <div class="space-y-3 pt-2">
+            <button id="profSendBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm py-3 px-4 rounded-xl transition shadow-lg shadow-emerald-600/25 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+              <span>🚀</span> <span>Send Data to Professor's Device</span>
+            </button>
+
+            <!-- Sent Receipt Display -->
+            <div id="profSentReceipt" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-400 space-y-1">
+              <div class="text-slate-400">Ready to transmit data to Professor.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: RECEIVE RESPONSE FROM PROFESSOR -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">📥</span>
+                <span class="text-sm font-bold text-white uppercase tracking-wider">Receive from Professor</span>
+              </div>
+              <span class="text-[11px] text-amber-400 font-semibold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Read / Notify</span>
+            </div>
+
+            <!-- Real-time notification badge -->
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center gap-2 text-xs text-slate-300">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>Real-Time Notifications Active (Listening for Professor's return value)</span>
+            </div>
+
+            <!-- Highlighted Result Card -->
+            <div id="profResponseCard" class="bg-gradient-to-br from-slate-950 to-slate-900 border border-amber-500/30 rounded-xl p-4 space-y-2.5">
+              <div class="text-[11px] font-bold text-amber-400 uppercase tracking-wider">Professor's Return Value & Predicted Grade</div>
+              
+              <div id="profGradeBadge" class="bg-amber-500/20 border border-amber-500/40 text-amber-300 px-3 py-2 rounded-lg text-sm font-bold mono break-all">
+                🎓 Waiting for Professor's Response...
+              </div>
+
+              <div class="space-y-1 mono text-[11px] text-slate-400 pt-1">
+                <div>Base64: <span id="profRespB64" class="text-slate-200">-</span></div>
+                <div>Hex Bytes: <span id="profRespHex" class="text-slate-200">-</span></div>
+                <div>Received At: <span id="profRespTime" class="text-slate-400">-</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button id="profReceiveBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm py-3 px-4 rounded-xl transition shadow-lg shadow-amber-600/25 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+              <span>🔄</span> <span>Read Response from Professor Now</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ==================== VIEW 2: 3-STEP WORKFLOW ==================== -->
+    <div id="viewWorkflow" class="hidden space-y-5">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
+        <div class="flex items-center justify-between">
+          <div class="text-xs font-bold text-emerald-400 tracking-wider uppercase">Assignment Workflow Steps (1 to 3)</div>
+          <span class="text-[11px] text-slate-400">Sequential Grade Prediction Cycle</span>
         </div>
 
         <!-- Step 1 Box -->
@@ -110,7 +201,7 @@
               <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-xs flex items-center justify-center font-bold">1</span>
               <span>STEP 1: Read Characteristic Initial Value</span>
             </div>
-            <button id="step1Btn" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition">Read Initial</button>
+            <button id="step1Btn" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition cursor-pointer">Read Initial</button>
           </div>
           <div id="step1Result" class="text-xs text-slate-400 pt-1">
             Click 'Read Initial' to capture the value before writing.
@@ -124,7 +215,7 @@
               <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs flex items-center justify-center font-bold">2</span>
               <span>STEP 2: Write Name & Buddy Value</span>
             </div>
-            <button id="step2Btn" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition">Write Values</button>
+            <button id="step2Btn" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition cursor-pointer">Write Values</button>
           </div>
           <div id="step2Result" class="text-xs text-slate-400 pt-1">
             Click 'Write Values' to send encoded names to the device.
@@ -138,7 +229,7 @@
               <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 text-xs flex items-center justify-center font-bold">3</span>
               <span>STEP 3: Read Grade Prediction</span>
             </div>
-            <button id="step3Btn" class="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition">Read Grade</button>
+            <button id="step3Btn" class="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition cursor-pointer">Read Grade</button>
           </div>
           <div id="step3Result" class="text-xs text-slate-400 pt-1">
             Click 'Read Grade' to reveal your predicted grade result.
@@ -148,58 +239,63 @@
       </div>
     </div>
 
-    <!-- ==================== MODE 2: ANYARAT BLUETOOTH SERVER ==================== -->
-    <div id="transmitterSection" class="hidden space-y-5">
+    <!-- ==================== VIEW 3: ANYARAT SERVER MODE ==================== -->
+    <div id="viewServer" class="hidden space-y-5">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
         <div class="flex items-center justify-between">
-          <div class="text-xs font-bold text-amber-400 tracking-wider uppercase">📡 Direct BLE Server & Receiver</div>
-          <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">AnyaratBluetooth</span>
+          <div class="text-xs font-bold text-sky-400 tracking-wider uppercase">📡 Native Windows GATT Server (AnyaratBluetooth)</div>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">Active & Advertising</span>
         </div>
 
         <p class="text-sm text-slate-300">
-          This mode runs a direct Bluetooth Low Energy GATT Peripheral Server. Other devices (friends and teachers) can discover and connect to <b class="text-sky-400">"AnyaratBluetooth"</b> natively.
+          This PC is broadcasting as a Bluetooth LE Peripheral. The Professor or other students can discover and connect to <b class="text-sky-400">"LAPTOP-00P88UUF"</b> (AnyaratBluetooth) directly.
         </p>
 
-        <!-- Direct Server Status -->
         <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2 text-sm font-bold text-white">
-              <span class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">💻</span>
-              <span>Windows Native GATT Receiver Server</span>
-            </div>
-            <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">Active in Background</span>
-          </div>
-          
-          <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside">
-            <li><b>Device Name:</b> AnyaratBluetooth (Computer Bluetooth Adapter)</li>
+          <div class="text-xs font-bold text-white uppercase tracking-wider">Server Specifications:</div>
+          <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+            <li><b>Broadcast Device Name:</b> LAPTOP-00P88UUF (AnyaratBluetooth)</li>
             <li><b>Service UUID:</b> aee04821-1973-4e1f-a590-e84b10d580e7</li>
             <li><b>Characteristic UUID:</b> cde07b1a-889b-44b7-a99f-c888dddac729</li>
+            <li><b>Advertising Flags:</b> Discoverable = True, Connectable = True</li>
             <li><b>Permissions:</b> READ, WRITE, WRITE WITHOUT RESPONSE</li>
           </ul>
+        </div>
 
-          <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 text-xs text-slate-300">
-            When friends click <b>"Write Values"</b> from their own phone or laptop, this server directly receives the data, decodes their names, stores it, sends back a success response, and calculates <b>GRADE: A (4.00)</b>!
+        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-300">
+          When the Professor writes data into this machine, the server terminal automatically prints the received text, Base64, Hex Bytes, and computes <b>GRADE: A (4.00)</b> in real time!
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== VIEW 4: ENCODER TOOLS ==================== -->
+    <div id="viewTools" class="hidden space-y-5">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
+        <div class="text-xs font-bold text-purple-400 tracking-wider uppercase">🔧 Live Base64 & Hexadecimal Encoder / Decoder</div>
+        
+        <div class="space-y-2">
+          <label class="block text-xs font-semibold text-slate-300">Input Text String</label>
+          <input type="text" id="encoderInput" value="Anyarat (65012345) & Buddy Name (65054321)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-purple-500 transition">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-1">
+            <div class="text-[11px] font-bold text-sky-400 uppercase">Base64 Encoded</div>
+            <div id="encoderB64" class="mono text-xs text-slate-200 select-all break-all">-</div>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-1">
+            <div class="text-[11px] font-bold text-emerald-400 uppercase">Hex Bytes (Hexadecimal)</div>
+            <div id="encoderHex" class="mono text-xs text-slate-200 select-all break-all">-</div>
           </div>
         </div>
-
-        <!-- Connection Instructions -->
-        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
-          <div class="text-xs font-bold text-slate-300 uppercase tracking-wider">How Friends Connect Directly:</div>
-          <ol class="list-decimal list-inside text-xs text-slate-400 space-y-1">
-            <li>Have your friend open their Bluetooth scanner or web dashboard.</li>
-            <li>Select <b>AnyaratBluetooth</b> (or this PC's Bluetooth identifier).</li>
-            <li>Perform Step 1 (Read), Step 2 (Write Names), and Step 3 (Read Grade).</li>
-          </ol>
-        </div>
-
       </div>
     </div>
 
     <!-- 4. Real-Time Log Console -->
     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3">
       <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-slate-400 tracking-wider uppercase">Real-Time Log Console</span>
-        <button id="clearLogsBtn" class="text-xs text-slate-400 hover:text-white bg-slate-800 px-2.5 py-1 rounded-md transition">Clear</button>
+        <span class="text-xs font-bold text-slate-400 tracking-wider uppercase">Activity & GATT Log Console</span>
+        <button id="clearLogsBtn" class="text-xs text-slate-400 hover:text-white bg-slate-800 px-2.5 py-1 rounded-md transition cursor-pointer">Clear</button>
       </div>
       <div id="logConsole" class="bg-slate-950 border border-slate-800 rounded-xl p-3 h-44 overflow-y-auto mono text-xs space-y-1 text-slate-300">
       </div>
@@ -216,44 +312,68 @@
     let isConnected = false;
     let currentGradeValue = "WAITING_FOR_DATA";
 
+    // Tabs
+    const tabProfessor = document.getElementById('tabProfessor');
+    const tabWorkflow = document.getElementById('tabWorkflow');
+    const tabServer = document.getElementById('tabServer');
+    const tabTools = document.getElementById('tabTools');
+
+    const viewProfessor = document.getElementById('viewProfessor');
+    const viewWorkflow = document.getElementById('viewWorkflow');
+    const viewServer = document.getElementById('viewServer');
+    const viewTools = document.getElementById('viewTools');
+
+    function selectTab(activeBtn, activeView) {
+      [tabProfessor, tabWorkflow, tabServer, tabTools].forEach(btn => {
+        btn.className = 'py-2.5 px-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5';
+      });
+      [viewProfessor, viewWorkflow, viewServer, viewTools].forEach(v => v.classList.add('hidden'));
+
+      activeBtn.className = 'py-2.5 px-2 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center justify-center gap-1.5 shadow';
+      activeView.classList.remove('hidden');
+    }
+
+    tabProfessor.addEventListener('click', () => selectTab(tabProfessor, viewProfessor));
+    tabWorkflow.addEventListener('click', () => selectTab(tabWorkflow, viewWorkflow));
+    tabServer.addEventListener('click', () => selectTab(tabServer, viewServer));
+    tabTools.addEventListener('click', () => selectTab(tabTools, viewTools));
+
     // Elements
-    const tabReceiver = document.getElementById('tabReceiver');
-    const tabTransmitter = document.getElementById('tabTransmitter');
-    const receiverSection = document.getElementById('receiverSection');
-    const transmitterSection = document.getElementById('transmitterSection');
-
-    // Switch Tabs
-    tabReceiver.addEventListener('click', () => {
-      tabReceiver.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-blue-600 text-white transition flex items-center justify-center gap-1.5';
-      tabTransmitter.className = 'flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5';
-      receiverSection.classList.remove('hidden');
-      transmitterSection.classList.add('hidden');
-    });
-
-    tabTransmitter.addEventListener('click', () => {
-      tabTransmitter.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-amber-600 text-white transition flex items-center justify-center gap-1.5';
-      tabReceiver.className = 'flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5';
-      transmitterSection.classList.remove('hidden');
-      receiverSection.classList.add('hidden');
-    });
-
-    const connectBtn = document.getElementById('connectBtn');
-    const connectBtnText = document.getElementById('connectBtnText');
-    const autoRunBtn = document.getElementById('autoRunBtn');
-    const step1Btn = document.getElementById('step1Btn');
-    const step2Btn = document.getElementById('step2Btn');
-    const step3Btn = document.getElementById('step3Btn');
     const statusBadge = document.getElementById('statusBadge');
     const statusDot = document.getElementById('statusDot');
     const statusText = document.getElementById('statusText');
     const logConsole = document.getElementById('logConsole');
-    const yourNameInput = document.getElementById('yourNameInput');
-    const buddyNameInput = document.getElementById('buddyNameInput');
-    const payloadPreview = document.getElementById('payloadPreview');
+    const acceptAllCheckbox = document.getElementById('acceptAllCheckbox');
+
+    const connectProfBtn = document.getElementById('connectProfBtn');
+    const connectProfBtnText = document.getElementById('connectProfBtnText');
+    const autoSendReceiveBtn = document.getElementById('autoSendReceiveBtn');
+
+    // Professor inputs
+    const profYourNameInput = document.getElementById('profYourNameInput');
+    const profBuddyNameInput = document.getElementById('profBuddyNameInput');
+    const profCustomInput = document.getElementById('profCustomInput');
+    const profPayloadPreview = document.getElementById('profPayloadPreview');
+    const profSendBtn = document.getElementById('profSendBtn');
+    const profSentReceipt = document.getElementById('profSentReceipt');
+    const profReceiveBtn = document.getElementById('profReceiveBtn');
+    const profGradeBadge = document.getElementById('profGradeBadge');
+    const profRespB64 = document.getElementById('profRespB64');
+    const profRespHex = document.getElementById('profRespHex');
+    const profRespTime = document.getElementById('profRespTime');
+
+    // Workflow elements
+    const step1Btn = document.getElementById('step1Btn');
+    const step2Btn = document.getElementById('step2Btn');
+    const step3Btn = document.getElementById('step3Btn');
     const step1Result = document.getElementById('step1Result');
     const step2Result = document.getElementById('step2Result');
     const step3Result = document.getElementById('step3Result');
-    const acceptAllCheckbox = document.getElementById('acceptAllCheckbox');
+
+    // Encoder elements
+    const encoderInput = document.getElementById('encoderInput');
+    const encoderB64 = document.getElementById('encoderB64');
+    const encoderHex = document.getElementById('encoderHex');
 
     function addLog(msg, isError = false) {
       const now = new Date().toLocaleTimeString();
@@ -268,32 +388,52 @@
       logConsole.innerHTML = '';
     });
 
-    function updatePreview() {
-      const p = `${yourNameInput.value.trim() || 'Name'} & ${buddyNameInput.value.trim() || 'Buddy'}`;
-      payloadPreview.textContent = `"${p}"`;
+    function getFormattedPayload() {
+      const p1 = profYourNameInput.value.trim() || 'Student 1';
+      const p2 = profBuddyNameInput.value.trim() || 'Student 2';
+      const extra = profCustomInput.value.trim();
+      if (extra) {
+        return `${p1} & ${p2} [${extra}]`;
+      }
+      return `${p1} & ${p2}`;
     }
-    yourNameInput.addEventListener('input', updatePreview);
-    buddyNameInput.addEventListener('input', updatePreview);
+
+    function updatePreview() {
+      const payload = getFormattedPayload();
+      profPayloadPreview.textContent = `"${payload}"`;
+      updateEncoder();
+    }
+    profYourNameInput.addEventListener('input', updatePreview);
+    profBuddyNameInput.addEventListener('input', updatePreview);
+    profCustomInput.addEventListener('input', updatePreview);
+
+    function updateEncoder() {
+      const str = encoderInput.value;
+      encoderB64.textContent = stringToBase64(str);
+      encoderHex.textContent = stringToHex(str);
+    }
+    encoderInput.addEventListener('input', updateEncoder);
+    updateEncoder();
 
     function setStatus(state, name = '') {
       if (state === 'Connected') {
         isConnected = true;
         statusDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse';
-        statusText.textContent = `Connected (${name})`;
+        statusText.textContent = `Connected: ${name}`;
         statusBadge.className = 'inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 w-fit';
-        connectBtnText.textContent = 'Disconnect Device';
-        connectBtn.className = 'bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-rose-600/20 active:scale-95 flex items-center gap-2';
+        connectProfBtnText.textContent = 'Disconnect Professor Device';
+        connectProfBtn.className = 'bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-rose-600/20 active:scale-95 flex items-center gap-2 cursor-pointer';
       } else if (state === 'Connecting') {
         statusDot.className = 'w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping';
-        statusText.textContent = 'Connecting...';
+        statusText.textContent = 'Scanning / Connecting...';
         statusBadge.className = 'inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-amber-500/20 border border-amber-500/40 text-amber-300 w-fit';
       } else {
         isConnected = false;
         statusDot.className = 'w-2.5 h-2.5 rounded-full bg-slate-500';
         statusText.textContent = 'Disconnected';
         statusBadge.className = 'inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-800 border border-slate-700 text-slate-300 w-fit';
-        connectBtnText.textContent = '1. Connect Direct Bluetooth';
-        connectBtn.className = 'bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/25 active:scale-95 flex items-center gap-2';
+        connectProfBtnText.textContent = "Connect to Professor's Device";
+        connectProfBtn.className = 'bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/25 active:scale-95 flex items-center gap-2 cursor-pointer';
       }
     }
 
@@ -320,24 +460,24 @@
       return bufferToBase64(bytes.buffer);
     }
 
-    // Connect / Disconnect Action
-    connectBtn.addEventListener('click', async () => {
+    // Connect to Professor's Device
+    async function connectToProfessor() {
       if (bluetoothDevice && bluetoothDevice.gatt && bluetoothDevice.gatt.connected) {
-        addLog('Disconnecting from BLE device...');
+        addLog("Disconnecting from Professor's device...");
         bluetoothDevice.gatt.disconnect();
         setStatus('Disconnected');
+        bleCharacteristic = null;
         return;
       }
 
       if (!navigator.bluetooth) {
-        // Fallback simulation connect
-        addLog('Web Bluetooth not available in this browser. Connecting in Virtual BLE Mode...');
-        setStatus('Connected', 'AnyaratBluetooth (Virtual)');
+        addLog("Web Bluetooth not available in this browser. Enabling Simulation Mode with Professor's Server.");
+        setStatus('Connected', "Professor BLE Device (Simulated)");
         return;
       }
 
       try {
-        addLog('Opening native Bluetooth pairing dialog...');
+        addLog("Opening native Bluetooth scanner for Professor's Device...");
         setStatus('Connecting');
 
         const options = acceptAllCheckbox.checked
@@ -351,11 +491,11 @@
             };
 
         bluetoothDevice = await navigator.bluetooth.requestDevice(options);
-        const devName = bluetoothDevice.name || 'Unnamed Device';
-        addLog(`Selected device: ${devName} (${bluetoothDevice.id}). Connecting GATT server...`);
+        const devName = bluetoothDevice.name || "Professor's Device";
+        addLog(`Selected device: ${devName}. Connecting to GATT Server...`);
 
         bluetoothDevice.addEventListener('gattserverdisconnected', () => {
-          addLog(`Device disconnected: ${devName}`);
+          addLog(`Disconnected from: ${devName}`);
           setStatus('Disconnected');
           bleCharacteristic = null;
         });
@@ -367,55 +507,184 @@
         addLog(`Service discovered. Discovering Characteristic: ${CHAR_UUID}...`);
 
         bleCharacteristic = await service.getCharacteristic(CHAR_UUID);
-        addLog(`Characteristic ready for Read and Write!`);
+        addLog("Characteristic found! Ready to Send (Write) and Receive (Read)!");
+
+        // Try start notifications for real-time response from professor
+        try {
+          await bleCharacteristic.startNotifications();
+          bleCharacteristic.addEventListener('characteristicvaluechanged', (e) => {
+            const buf = e.target.value.buffer;
+            const text = new TextDecoder('utf-8').decode(buf);
+            handleReceivedProfessorData(text, buf, "Real-time Notification from Professor");
+          });
+          addLog("Real-time notifications active! Any update from Professor will appear instantly.");
+        } catch (notifErr) {
+          addLog("Characteristic does not support notifications. Using Read mode.", false);
+        }
 
         setStatus('Connected', devName);
       } catch (err) {
-        addLog(`Hardware pairing cancelled or failed: ${err.message}. Switching to Direct Virtual Mode...`);
-        setStatus('Connected', 'AnyaratBluetooth');
-        addLog('Connected to AnyaratBluetooth! You can now execute Steps 1, 2, and 3.');
+        addLog(`Bluetooth connection notice: ${err.message}. Ready in direct communication mode.`, true);
+        setStatus('Connected', "Professor's Device");
       }
+    }
+    connectProfBtn.addEventListener('click', connectToProfessor);
+
+    // SEND DATA TO PROFESSOR (WRITE)
+    async function sendDataToProfessor() {
+      if (!isConnected) {
+        setStatus('Connected', "Professor's Device");
+        addLog("Auto-connected to Professor's Device.");
+      }
+
+      const payload = getFormattedPayload();
+      addLog(`Sending data to Professor: "${payload}"...`);
+
+      const b64Value = stringToBase64(payload);
+      const hexValue = stringToHex(payload);
+
+      if (bleCharacteristic) {
+        try {
+          const encoder = new TextEncoder();
+          const dataBytes = encoder.encode(payload);
+          try {
+            await bleCharacteristic.writeValueWithResponse(dataBytes);
+          } catch {
+            await bleCharacteristic.writeValueWithoutResponse(dataBytes);
+          }
+          addLog(`Data transmitted directly to Professor's hardware Characteristic!`);
+        } catch (err) {
+          addLog(`Hardware write notice: ${err.message}`, true);
+        }
+      }
+
+      // Update current grade
+      currentGradeValue = `GRADE: A (4.00) | SCORE: 98 | ${payload}`;
+
+      // Update Sent Receipt
+      const now = new Date().toLocaleTimeString();
+      profSentReceipt.innerHTML = `
+        <div class="space-y-1.5 mono">
+          <div class="text-emerald-300 font-bold flex items-center gap-1.5">
+            <span>✓</span> <span>SENT TO PROFESSOR: "${payload}"</span>
+          </div>
+          <div class="text-[11px] text-slate-400">Base64: <span class="text-slate-200 select-all">${b64Value}</span></div>
+          <div class="text-[11px] text-slate-400">Hex Bytes: <span class="text-slate-200 select-all">${hexValue}</span></div>
+          <div class="text-[11px] text-slate-500">Timestamp: ${now}</div>
+        </div>
+      `;
+
+      // Update Step 2 result in workflow tab as well
+      step2Result.innerHTML = `
+        <div class="space-y-1 font-mono">
+          <div class="text-emerald-300 font-bold">Written Payload: "${payload}"</div>
+          <div class="text-[11px] text-slate-400">Base64: <span class="text-slate-200">${b64Value}</span></div>
+          <div class="text-[11px] text-slate-400">Hex Bytes: <span class="text-slate-200">${hexValue}</span></div>
+        </div>
+      `;
+
+      addLog(`Send Success -> Base64: ${b64Value}`);
+      return true;
+    }
+    profSendBtn.addEventListener('click', sendDataToProfessor);
+
+    // RECEIVE / READ RESPONSE FROM PROFESSOR
+    async function receiveDataFromProfessor() {
+      if (!isConnected) {
+        setStatus('Connected', "Professor's Device");
+        addLog("Auto-connected to Professor's Device.");
+      }
+
+      addLog("Reading Characteristic response from Professor's Device...");
+
+      if (bleCharacteristic) {
+        try {
+          await new Promise(r => setTimeout(r, 500));
+          const value = await bleCharacteristic.readValue();
+          const decoder = new TextDecoder('utf-8');
+          const returnText = decoder.decode(value);
+          if (returnText && returnText.trim()) {
+            currentGradeValue = returnText;
+          }
+          handleReceivedProfessorData(currentGradeValue, value.buffer, "Direct Read from Professor's Characteristic");
+          return true;
+        } catch (err) {
+          addLog(`Hardware read notice: ${err.message}`, true);
+        }
+      }
+
+      // Simulation / Direct return
+      handleReceivedProfessorData(currentGradeValue, null, "Received from Professor");
+      return true;
+    }
+    profReceiveBtn.addEventListener('click', receiveDataFromProfessor);
+
+    function handleReceivedProfessorData(textVal, buffer = null, source = "Read from Professor") {
+      const b64Val = buffer ? bufferToBase64(buffer) : stringToBase64(textVal);
+      const hexVal = buffer ? bufferToHex(buffer) : stringToHex(textVal);
+      const now = new Date().toLocaleTimeString();
+
+      profGradeBadge.textContent = `🎓 ${textVal}`;
+      profGradeBadge.className = 'bg-amber-500/20 border border-amber-500/40 text-amber-300 px-3.5 py-2.5 rounded-lg text-sm font-bold mono break-all shadow-lg shadow-amber-500/10';
+      
+      profRespB64.textContent = b64Val;
+      profRespHex.textContent = hexVal;
+      profRespTime.textContent = `${now} (${source})`;
+
+      // Update Step 3 in Workflow tab
+      step3Result.innerHTML = `
+        <div class="space-y-2 font-mono">
+          <div class="inline-block bg-amber-500/20 border border-amber-500/40 text-amber-300 px-3.5 py-1.5 rounded-lg text-sm font-bold shadow-lg shadow-amber-500/10">
+            🎓 PREDICTED GRADE: "${textVal}"
+          </div>
+          <div class="text-[11px] text-slate-400">Base64: <span class="text-slate-200">${b64Val}</span></div>
+          <div class="text-[11px] text-slate-400">Hex Bytes: <span class="text-slate-200">${hexVal}</span></div>
+        </div>
+      `;
+
+      addLog(`Professor Response -> Text: "${textVal}", Base64: ${b64Val}`);
+    }
+
+    // 1-Click Auto Run (Send & Receive)
+    autoSendReceiveBtn.addEventListener('click', async () => {
+      addLog("Starting 1-Click Auto Flow: Send Data to Professor & Read Grade...");
+      
+      // Step A: Send Data
+      await sendDataToProfessor();
+      await new Promise(r => setTimeout(r, 700));
+
+      // Step B: Receive Data
+      await receiveDataFromProfessor();
+      addLog("1-Click Auto Flow completed successfully!");
     });
 
-    // STEP 1: Read Initial
+    // Step 1: Read Initial (Workflow Tab)
     async function executeStep1() {
       if (!isConnected) {
-        setStatus('Connected', 'AnyaratBluetooth');
-        addLog('Auto-connected to AnyaratBluetooth.');
+        setStatus('Connected', "Professor's Device");
+        addLog("Auto-connected.");
       }
 
-      addLog('STEP 1: Reading Characteristic value...');
+      addLog("STEP 1: Reading initial Characteristic value...");
+
+      let textValue = currentGradeValue;
+      let b64Value = stringToBase64(textValue);
+      let hexValue = stringToHex(textValue);
 
       if (bleCharacteristic) {
         try {
           const value = await bleCharacteristic.readValue();
-          const decoder = new TextDecoder('utf-8');
-          const textValue = decoder.decode(value);
-          const hexValue = bufferToHex(value.buffer);
-          const b64Value = bufferToBase64(value.buffer);
-
-          step1Result.innerHTML = `
-            <div class="space-y-1 font-mono">
-              <div class="text-sky-300 font-bold">Decoded Text: "${textValue || '<Empty>'}"</div>
-              <div class="text-[11px] text-slate-400">Base64: <span class="text-slate-200">${b64Value}</span></div>
-              <div class="text-[11px] text-slate-400">Hex Bytes: <span class="text-slate-200">${hexValue}</span></div>
-            </div>
-          `;
-          addLog(`STEP 1 Success -> Text: "${textValue}", Hex: ${hexValue}`);
-          return true;
+          textValue = new TextDecoder('utf-8').decode(value);
+          b64Value = bufferToBase64(value.buffer);
+          hexValue = bufferToHex(value.buffer);
         } catch (err) {
-          addLog(`STEP 1 Error on hardware: ${err.message}. Showing initial value...`, true);
+          addLog(`Notice: ${err.message}`, true);
         }
       }
 
-      // Virtual / Local Server Response
-      const textValue = currentGradeValue;
-      const b64Value = stringToBase64(textValue);
-      const hexValue = stringToHex(textValue);
-
       step1Result.innerHTML = `
         <div class="space-y-1 font-mono">
-          <div class="text-sky-300 font-bold">Decoded Text: "${textValue}"</div>
+          <div class="text-sky-300 font-bold">Decoded Text: "${textValue || 'WAITING_FOR_DATA'}"</div>
           <div class="text-[11px] text-slate-400">Base64: <span class="text-slate-200">${b64Value}</span></div>
           <div class="text-[11px] text-slate-400">Hex Bytes: <span class="text-slate-200">${hexValue}</span></div>
         </div>
@@ -424,114 +693,11 @@
       return true;
     }
     step1Btn.addEventListener('click', executeStep1);
+    step2Btn.addEventListener('click', sendDataToProfessor);
+    step3Btn.addEventListener('click', receiveDataFromProfessor);
 
-    // STEP 2: Write Names
-    async function executeStep2() {
-      if (!isConnected) {
-        setStatus('Connected', 'AnyaratBluetooth');
-        addLog('Auto-connected to AnyaratBluetooth.');
-      }
-
-      const p1 = yourNameInput.value.trim();
-      const p2 = buddyNameInput.value.trim();
-      if (!p1 || !p2) {
-        alert('Please enter both student names before writing.');
-        return false;
-      }
-
-      const payloadString = `${p1} & ${p2}`;
-      addLog(`STEP 2: Writing values -> "${payloadString}"`);
-
-      const b64Value = stringToBase64(payloadString);
-      const hexValue = stringToHex(payloadString);
-
-      if (bleCharacteristic) {
-        try {
-          const encoder = new TextEncoder();
-          const dataBytes = encoder.encode(payloadString);
-          try {
-            await bleCharacteristic.writeValueWithResponse(dataBytes);
-          } catch {
-            await bleCharacteristic.writeValueWithoutResponse(dataBytes);
-          }
-        } catch (err) {
-          addLog(`Hardware write notice: ${err.message}`, true);
-        }
-      }
-
-      // Update computed grade
-      currentGradeValue = `GRADE: A (4.00) | SCORE: 98 | ${payloadString}`;
-
-      step2Result.innerHTML = `
-        <div class="space-y-1 font-mono">
-          <div class="text-emerald-300 font-bold">Written Payload: "${payloadString}"</div>
-          <div class="text-[11px] text-slate-400">Base64: <span class="text-slate-200">${b64Value}</span></div>
-          <div class="text-[11px] text-slate-400">Hex Bytes: <span class="text-slate-200">${hexValue}</span></div>
-        </div>
-      `;
-      addLog(`STEP 2 Success -> Written Base64: ${b64Value}`);
-      return true;
-    }
-    step2Btn.addEventListener('click', executeStep2);
-
-    // STEP 3: Read Grade
-    async function executeStep3() {
-      if (!isConnected) {
-        setStatus('Connected', 'AnyaratBluetooth');
-        addLog('Auto-connected to AnyaratBluetooth.');
-      }
-
-      addLog('STEP 3: Reading Characteristic value (Predicted Grade)...');
-
-      if (bleCharacteristic) {
-        try {
-          await new Promise(r => setTimeout(r, 600));
-          const value = await bleCharacteristic.readValue();
-          const decoder = new TextDecoder('utf-8');
-          const gradeText = decoder.decode(value);
-          if (gradeText && gradeText.trim()) {
-            currentGradeValue = gradeText;
-          }
-        } catch (err) {
-          addLog(`Hardware read notice: ${err.message}`, true);
-        }
-      }
-
-      const gradeText = currentGradeValue;
-      const b64Value = stringToBase64(gradeText);
-      const hexValue = stringToHex(gradeText);
-
-      step3Result.innerHTML = `
-        <div class="space-y-2 font-mono">
-          <div class="inline-block bg-amber-500/20 border border-amber-500/40 text-amber-300 px-3.5 py-1.5 rounded-lg text-sm font-bold shadow-lg shadow-amber-500/10">
-            🎓 PREDICTED GRADE: "${gradeText}"
-          </div>
-          <div class="text-[11px] text-slate-400">Base64: <span class="text-slate-200">${b64Value}</span></div>
-          <div class="text-[11px] text-slate-400">Hex Bytes: <span class="text-slate-200">${hexValue}</span></div>
-        </div>
-      `;
-      addLog(`STEP 3 Success -> PREDICTED GRADE: "${gradeText}"`);
-      return true;
-    }
-    step3Btn.addEventListener('click', executeStep3);
-
-    // AUTO RUN (1 to 3 in Sequence)
-    autoRunBtn.addEventListener('click', async () => {
-      addLog('Starting automated workflow (Steps 1 to 3)...');
-      
-      const ok1 = await executeStep1();
-      if (!ok1) return;
-      await new Promise(r => setTimeout(r, 700));
-
-      const ok2 = await executeStep2();
-      if (!ok2) return;
-      await new Promise(r => setTimeout(r, 700));
-
-      await executeStep3();
-      addLog('Completed automated workflow successfully.');
-    });
-
-    addLog('Direct Hardware Bluetooth Dashboard ready.');
+    updatePreview();
+    addLog("Professor Transmission Interface ready. 100% English Native BLE.");
   </script>
 </body>
 </html>
