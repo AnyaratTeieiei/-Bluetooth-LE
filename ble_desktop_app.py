@@ -1,4 +1,4 @@
-﻿import sys
+import sys
 import base64
 import asyncio
 import threading
@@ -69,7 +69,7 @@ class BleDesktopApp:
         title = tk.Label(header, text="Bluetooth LE Grade Predictor", font=("Segoe UI", 16, "bold"), fg="#f8fafc", bg="#1e293b")
         title.pack(anchor="w")
 
-        subtitle = tk.Label(header, text="PC Hardware Edition — Running with Laptop's Real Bluetooth Antenna", font=("Segoe UI", 9), fg="#38bdf8", bg="#1e293b")
+        subtitle = tk.Label(header, text="Professor Transmission Interface — Direct Native Bluetooth Hardware", font=("Segoe UI", 9), fg="#34d399", bg="#1e293b")
         subtitle.pack(anchor="w", pady=(0, 6))
 
         # Status row
@@ -95,26 +95,26 @@ class BleDesktopApp:
         scan_frame = tk.Frame(self.scroll_frame, bg="#1e293b", bd=1, relief="solid", padx=18, pady=12)
         scan_frame.pack(fill="x", padx=16, pady=6)
 
-        tk.Label(scan_frame, text="REAL BLUETOOTH HARDWARE SCANNER", font=("Segoe UI", 10, "bold"), fg="#38bdf8", bg="#1e293b").pack(anchor="w", pady=(0, 6))
+        tk.Label(scan_frame, text="CONNECT TO PROFESSOR'S BLE DEVICE", font=("Segoe UI", 10, "bold"), fg="#38bdf8", bg="#1e293b").pack(anchor="w", pady=(0, 6))
 
         scan_btn_row = tk.Frame(scan_frame, bg="#1e293b")
         scan_btn_row.pack(fill="x", pady=4)
 
-        self.scan_btn = tk.Button(scan_btn_row, text="🔍 Scan Real Devices", font=("Segoe UI", 10, "bold"), bg="#0284c7", fg="#fff", activebackground="#0369a1", bd=0, padx=12, pady=6, cursor="hand2", command=self.on_scan)
+        self.scan_btn = tk.Button(scan_btn_row, text="🔍 Scan BLE Devices", font=("Segoe UI", 10, "bold"), bg="#0284c7", fg="#fff", activebackground="#0369a1", bd=0, padx=12, pady=6, cursor="hand2", command=self.on_scan)
         self.scan_btn.pack(side="left", padx=(0, 8))
 
         self.device_combo = ttk.Combobox(scan_btn_row, font=("Segoe UI", 9), state="readonly", width=42)
-        self.device_combo.set("Click 'Scan Real Devices' to search...")
+        self.device_combo.set("Click 'Scan BLE Devices' to find Professor...")
         self.device_combo.pack(side="left", padx=(0, 8), fill="x", expand=True)
 
-        self.connect_btn = tk.Button(scan_btn_row, text="Connect Selected", font=("Segoe UI", 10, "bold"), bg="#10b981", fg="#fff", activebackground="#059669", bd=0, padx=14, pady=6, cursor="hand2", command=self.on_connect_toggle)
+        self.connect_btn = tk.Button(scan_btn_row, text="Connect to Professor", font=("Segoe UI", 10, "bold"), bg="#10b981", fg="#fff", activebackground="#059669", bd=0, padx=14, pady=6, cursor="hand2", command=self.on_connect_toggle)
         self.connect_btn.pack(side="left")
 
         # 3. Student Information Frame
         info_frame = tk.Frame(self.scroll_frame, bg="#1e293b", bd=1, relief="solid", padx=18, pady=12)
         info_frame.pack(fill="x", padx=16, pady=6)
 
-        tk.Label(info_frame, text="STUDENT INFORMATION", font=("Segoe UI", 10, "bold"), fg="#818cf8", bg="#1e293b").pack(anchor="w", pady=(0, 8))
+        tk.Label(info_frame, text="STUDENT INFORMATION (PAYLOAD FOR PROFESSOR)", font=("Segoe UI", 10, "bold"), fg="#818cf8", bg="#1e293b").pack(anchor="w", pady=(0, 8))
 
         tk.Label(info_frame, text="Your Name & Student ID:", font=("Segoe UI", 9, "bold"), fg="#cbd5e1", bg="#1e293b").pack(anchor="w")
         self.name_entry = tk.Entry(info_frame, font=("Segoe UI", 10), bg="#0f172a", fg="#f8fafc", insertbackground="#fff", bd=1, relief="solid")
@@ -136,9 +136,9 @@ class BleDesktopApp:
         flow_frame = tk.Frame(self.scroll_frame, bg="#1e293b", bd=1, relief="solid", padx=18, pady=12)
         flow_frame.pack(fill="x", padx=16, pady=6)
 
-        tk.Label(flow_frame, text="ASSIGNMENT WORKFLOW STEPS", font=("Segoe UI", 10, "bold"), fg="#34d399", bg="#1e293b").pack(anchor="w", pady=(0, 8))
+        tk.Label(flow_frame, text="PROFESSOR TRANSMISSION & GRADE PREDICTION", font=("Segoe UI", 10, "bold"), fg="#34d399", bg="#1e293b").pack(anchor="w", pady=(0, 8))
 
-        self.autorun_btn = tk.Button(flow_frame, text="⚡ Run Steps 1-3 Auto in Sequence", font=("Segoe UI", 10, "bold"), bg="#7c3aed", fg="#ffffff", activebackground="#6d28d9", bd=0, padx=16, pady=8, cursor="hand2", command=self.on_auto_run)
+        self.autorun_btn = tk.Button(flow_frame, text="⚡ 1-Click Auto: Send Data & Read Return Grade", font=("Segoe UI", 10, "bold"), bg="#7c3aed", fg="#ffffff", activebackground="#6d28d9", bd=0, padx=16, pady=8, cursor="hand2", command=self.on_auto_run)
         self.autorun_btn.pack(anchor="w", pady=(0, 10))
 
         # Step 1 Box
@@ -157,10 +157,10 @@ class BleDesktopApp:
         step2_box.pack(fill="x", pady=5)
         s2_head = tk.Frame(step2_box, bg="#0f172a")
         s2_head.pack(fill="x")
-        tk.Label(s2_head, text="STEP 2: Write Name & Buddy Value", font=("Segoe UI", 10, "bold"), fg="#f8fafc", bg="#0f172a").pack(side="left")
-        self.s2_btn = tk.Button(s2_head, text="Write Values", font=("Segoe UI", 9, "bold"), bg="#10b981", fg="#fff", bd=0, padx=12, pady=4, cursor="hand2", command=self.on_step2)
+        tk.Label(s2_head, text="STEP 2: Send Data to Professor's Device (Write)", font=("Segoe UI", 10, "bold"), fg="#f8fafc", bg="#0f172a").pack(side="left")
+        self.s2_btn = tk.Button(s2_head, text="Send to Professor", font=("Segoe UI", 9, "bold"), bg="#10b981", fg="#fff", bd=0, padx=12, pady=4, cursor="hand2", command=self.on_step2)
         self.s2_btn.pack(side="right")
-        self.s2_res = tk.Label(step2_box, text="Click 'Write Values' to perform Step 2.", font=("Consolas", 9), fg="#94a3b8", bg="#0f172a", justify="left")
+        self.s2_res = tk.Label(step2_box, text="Click 'Send to Professor' to transmit encoded names.", font=("Consolas", 9), fg="#94a3b8", bg="#0f172a", justify="left")
         self.s2_res.pack(anchor="w", pady=(6, 0))
 
         # Step 3 Box
@@ -168,10 +168,10 @@ class BleDesktopApp:
         step3_box.pack(fill="x", pady=5)
         s3_head = tk.Frame(step3_box, bg="#0f172a")
         s3_head.pack(fill="x")
-        tk.Label(s3_head, text="STEP 3: Read Grade Prediction", font=("Segoe UI", 10, "bold"), fg="#f8fafc", bg="#0f172a").pack(side="left")
+        tk.Label(s3_head, text="STEP 3: Receive Predicted Grade from Professor (Read)", font=("Segoe UI", 10, "bold"), fg="#f8fafc", bg="#0f172a").pack(side="left")
         self.s3_btn = tk.Button(s3_head, text="Read Grade", font=("Segoe UI", 9, "bold"), bg="#f59e0b", fg="#fff", bd=0, padx=12, pady=4, cursor="hand2", command=self.on_step3)
         self.s3_btn.pack(side="right")
-        self.s3_res = tk.Label(step3_box, text="Click 'Read Grade' to perform Step 3 and reveal grade.", font=("Consolas", 9), fg="#94a3b8", bg="#0f172a", justify="left")
+        self.s3_res = tk.Label(step3_box, text="Click 'Read Grade' to receive Professor's return value.", font=("Consolas", 9), fg="#94a3b8", bg="#0f172a", justify="left")
         self.s3_res.pack(anchor="w", pady=(6, 0))
 
         # 5. Log Console
