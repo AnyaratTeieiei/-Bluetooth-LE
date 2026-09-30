@@ -16,7 +16,7 @@ export default function InputSection({
       {/* Teacher's BLE Device Name */}
       <View style={styles.inputGroup}>
         <Text style={[styles.label, { color: '#38bdf8' }]}>
-          📡 Teacher's BLE Device Name (ชื่ออุปกรณ์ที่สแกนเจอใน Bluetooth)
+          📡 Target BLE Device Name (e.g. AnyaratBluetooth)
         </Text>
         <TextInput
           style={[styles.input, { borderColor: '#0284c7' }]}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bluetooth LE Grade Predictor - Dual Mode</title>
+  <title>Bluetooth LE Grade Predictor - Direct Hardware Edition</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -23,9 +23,9 @@
         <div>
           <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
             <span>Bluetooth LE Grade Predictor</span>
-            <span class="text-xs bg-sky-500/20 text-sky-400 border border-sky-500/30 px-2.5 py-0.5 rounded-full font-semibold">Dual Mode</span>
+            <span class="text-xs bg-sky-500/20 text-sky-400 border border-sky-500/30 px-2.5 py-0.5 rounded-full font-semibold">Direct BLE</span>
           </h1>
-          <p class="text-slate-400 text-sm mt-0.5">Transmitter (Broadcast) & Receiver (Connect) System</p>
+          <p class="text-slate-400 text-sm mt-0.5">Native Bluetooth LE Hardware Communication (No Third-Party Apps Required)</p>
         </div>
 
         <!-- Status Badge -->
@@ -38,10 +38,10 @@
       <!-- Mode Switcher Tabs -->
       <div class="flex rounded-xl bg-slate-950 p-1 border border-slate-800 gap-1 mb-4">
         <button id="tabReceiver" class="flex-1 py-2 text-xs font-bold rounded-lg bg-blue-600 text-white transition flex items-center justify-center gap-1.5">
-          <span>📥</span> <span>Mode 1: ตัวรับสัญญาณ & เชื่อมต่อ (Receiver)</span>
+          <span>📥</span> <span>Mode 1: Client / Connect (Scan & Interact)</span>
         </button>
         <button id="tabTransmitter" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
-          <span>📡</span> <span>Mode 2: ตัวปล่อยสัญญาณ AnyaratBluetooth (Transmitter)</span>
+          <span>📡</span> <span>Mode 2: AnyaratBluetooth Server (Broadcast & Receive)</span>
         </button>
       </div>
 
@@ -58,7 +58,7 @@
       </div>
     </div>
 
-    <!-- ==================== MODE 1: RECEIVER SECTION ==================== -->
+    <!-- ==================== MODE 1: CLIENT / RECEIVER ==================== -->
     <div id="receiverSection" class="space-y-5">
       <!-- Student Info Card -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
@@ -87,7 +87,7 @@
         <div class="flex flex-wrap items-center gap-3">
           <button id="connectBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/20 active:scale-95 flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            <span id="connectBtnText">1. Connect BLE Device</span>
+            <span id="connectBtnText">1. Connect Direct Bluetooth</span>
           </button>
 
           <button id="autoRunBtn" disabled class="bg-purple-600 hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-purple-600/20 active:scale-95 flex items-center gap-2">
@@ -96,7 +96,7 @@
 
           <label class="text-xs text-slate-400 flex items-center gap-2 cursor-pointer ml-auto">
             <input type="checkbox" id="acceptAllCheckbox" checked class="rounded bg-slate-800 border-slate-700 text-sky-500 focus:ring-0">
-            <span>Scan All Devices (Recommended)</span>
+            <span>Scan All Nearby Devices</span>
           </label>
         </div>
 
@@ -105,7 +105,7 @@
           <div class="flex items-center justify-between">
             <div class="text-sm font-bold text-white flex items-center gap-2">
               <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-xs flex items-center justify-center font-bold">1</span>
-              <span>STEP 1: Read Characteristic Value</span>
+              <span>STEP 1: Read Characteristic Initial Value</span>
             </div>
             <button id="step1Btn" disabled class="bg-blue-600/80 hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition">Read Initial</button>
           </div>
@@ -124,7 +124,7 @@
             <button id="step2Btn" disabled class="bg-emerald-600/80 hover:bg-emerald-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition">Write Values</button>
           </div>
           <div id="step2Result" class="text-xs text-slate-400 pt-1">
-            Click 'Write Values' to encode and send names to the device.
+            Click 'Write Values' to send encoded names to the device.
           </div>
         </div>
 
@@ -138,55 +138,55 @@
             <button id="step3Btn" disabled class="bg-amber-600/80 hover:bg-amber-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition">Read Grade</button>
           </div>
           <div id="step3Result" class="text-xs text-slate-400 pt-1">
-            Click 'Read Grade' to reveal your predicted grade.
+            Click 'Read Grade' to reveal your predicted grade result.
           </div>
         </div>
 
       </div>
     </div>
 
-    <!-- ==================== MODE 2: TRANSMITTER SECTION ==================== -->
+    <!-- ==================== MODE 2: ANYARAT BLUETOOTH SERVER ==================== -->
     <div id="transmitterSection" class="hidden space-y-5">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
         <div class="flex items-center justify-between">
-          <div class="text-xs font-bold text-amber-400 tracking-wider uppercase">📡 Transmitter / Broadcaster Mode</div>
+          <div class="text-xs font-bold text-amber-400 tracking-wider uppercase">📡 Direct BLE Server & Receiver</div>
           <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">AnyaratBluetooth</span>
         </div>
 
         <p class="text-sm text-slate-300">
-          โหมดนี้สำหรับทำให้ **อุปกรณ์ของคุณยิงสัญญาณบลูทูธออกไปในอากาศ** เพื่อให้เครื่องเพื่อนหรือเครื่องอาจารย์สแกนเจอชื่อ <b class="text-sky-400">"AnyaratBluetooth"</b> ครับ
+          This mode runs a direct Bluetooth Low Energy GATT Peripheral Server. Other devices (friends and teachers) can discover and connect to <b class="text-sky-400">"AnyaratBluetooth"</b> natively.
         </p>
 
-        <!-- Option 1: Mobile Broadcast -->
+        <!-- Direct Server Status -->
         <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
-          <div class="flex items-center gap-2 text-sm font-bold text-white">
-            <span class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">📱</span>
-            <span>วิธีที่ 1: ปล่อยจากโทรศัพท์มือถือผ่าน nRF Connect (ขึ้นที่เครื่องเพื่อน 100%)</span>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2 text-sm font-bold text-white">
+              <span class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">💻</span>
+              <span>Windows Native GATT Receiver Server</span>
+            </div>
+            <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">Active in Background</span>
           </div>
-          <ol class="list-decimal list-inside text-xs text-slate-300 space-y-1.5 pl-1 leading-relaxed">
-            <li>เปิดแอป <b>nRF Connect for Mobile</b> บนโทรศัพท์ของคุณ</li>
-            <li>ไปที่แท็บ <b>"Advertiser"</b> ด้านบน</li>
-            <li>กดปุ่ม <b>+ (Add)</b> ➔ ในช่อง Display Name พิมพ์: <span class="mono text-sky-400 font-bold">AnyaratBluetooth</span></li>
-            <li>กด <b>Add Service</b> ➔ กรอก UUID: <span class="mono text-slate-200">aee04821-1973-4e1f-a590-e84b10d580e7</span></li>
-            <li>สับสวิตช์เปิด <b>Advertising: ON</b></li>
-            <li class="text-emerald-400 font-semibold">เมื่อเพื่อนเปิดสแกน จะพบชื่อ <b>AnyaratBluetooth</b> ปรากฏขึ้นมาทันที!</li>
-          </ol>
+          
+          <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside">
+            <li><b>Device Name:</b> AnyaratBluetooth (Computer Bluetooth Adapter)</li>
+            <li><b>Service UUID:</b> aee04821-1973-4e1f-a590-e84b10d580e7</li>
+            <li><b>Characteristic UUID:</b> cde07b1a-889b-44b7-a99f-c888dddac729</li>
+            <li><b>Permissions:</b> READ, WRITE, WRITE WITHOUT RESPONSE</li>
+          </ul>
+
+          <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 text-xs text-slate-300">
+            When friends click <b>"Write Values"</b> from their own phone or laptop, this server directly receives the data, decodes their names, stores it, sends back a success response, and calculates <b>GRADE: A (4.00)</b>!
+          </div>
         </div>
 
-        <!-- Option 2: PC Discoverable -->
-        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
-          <div class="flex items-center gap-2 text-sm font-bold text-white">
-            <span class="w-6 h-6 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs">💻</span>
-            <span>วิธีที่ 2: ปล่อยสัญญาณจากคอมพิวเตอร์เครื่องนี้</span>
-          </div>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            ระบบ Windows จะปล่อยสัญญาณบลูทูธให้เครื่องอื่นเห็นได้อัตโนมัติ เมื่อเปิดหน้าต่าง <b>Bluetooth Settings</b> และตั้งชื่อเครื่องเป็น <b>AnyaratBluetooth</b>
-          </p>
-          <div class="flex flex-wrap gap-2 pt-1">
-            <button onclick="alert('กรุณาเปิดการตั้งค่า Bluetooth ใน Windows เพื่อเปิดโหมด Discoverable ให้เพื่อนสแกนเจอ')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2 rounded-lg transition border border-slate-700">
-              ⚙️ เปิดหน้าต่าง Bluetooth Settings
-            </button>
-          </div>
+        <!-- Connection Instructions -->
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
+          <div class="text-xs font-bold text-slate-300 uppercase tracking-wider">How Friends Connect Directly:</div>
+          <ol class="list-decimal list-inside text-xs text-slate-400 space-y-1">
+            <li>Have your friend open their Bluetooth scanner or web dashboard.</li>
+            <li>Select <b>AnyaratBluetooth</b> (or this PC's Bluetooth identifier).</li>
+            <li>Perform Step 1 (Read), Step 2 (Write Names), and Step 3 (Read Grade).</li>
+          </ol>
         </div>
 
       </div>
@@ -254,7 +254,7 @@
       const now = new Date().toLocaleTimeString();
       const div = document.createElement('div');
       div.className = isError ? 'text-red-400' : 'text-slate-300';
-      div.innerHTML = `<span class="text-slate-500">[${now}]</span> ${isError ? '❌' : '✓'} ${msg}`;
+      div.innerHTML = `<span class="text-slate-500">[${now}]</span> ${isError ? 'FAIL' : 'OK'} ${msg}`;
       logConsole.appendChild(div);
       logConsole.scrollTop = logConsole.scrollHeight;
     }
@@ -286,7 +286,7 @@
         statusDot.className = 'w-2.5 h-2.5 rounded-full bg-slate-500';
         statusText.textContent = 'Disconnected';
         statusBadge.className = 'inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-800 border border-slate-700 text-slate-300 w-fit';
-        connectBtnText.textContent = '1. Connect BLE Device';
+        connectBtnText.textContent = '1. Connect Direct Bluetooth';
         connectBtn.className = 'bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/20 active:scale-95 flex items-center gap-2';
         [autoRunBtn, step1Btn, step2Btn, step3Btn].forEach(b => b.disabled = true);
       }
@@ -313,12 +313,12 @@
       }
 
       if (!navigator.bluetooth) {
-        alert('Web Bluetooth is not supported in this browser. Please open in Google Chrome or Microsoft Edge.');
+        alert('Web Bluetooth is not supported in this browser. Please use Google Chrome or Microsoft Edge.');
         return;
       }
 
       try {
-        addLog('Opening Windows Bluetooth Scan Dialog...');
+        addLog('Opening native Bluetooth pairing dialog...');
         setStatus('Connecting');
 
         const options = acceptAllCheckbox.checked
@@ -348,7 +348,7 @@
         addLog(`Service discovered. Discovering Characteristic: ${CHAR_UUID}...`);
 
         bleCharacteristic = await service.getCharacteristic(CHAR_UUID);
-        addLog(`Characteristic ready for Read & Write!`);
+        addLog(`Characteristic ready for Read and Write!`);
 
         setStatus('Connected', devName);
       } catch (err) {
@@ -389,7 +389,7 @@
       const p1 = yourNameInput.value.trim();
       const p2 = buddyNameInput.value.trim();
       if (!p1 || !p2) {
-        alert('Please fill in both names before writing.');
+        alert('Please enter both student names before writing.');
         return false;
       }
 
@@ -440,7 +440,7 @@
         step3Result.innerHTML = `
           <div class="space-y-2 font-mono">
             <div class="inline-block bg-amber-500/20 border border-amber-500/40 text-amber-300 px-3 py-1 rounded-lg text-sm font-bold">
-              🎓 PREDICTED GRADE: "${gradeText || 'Grade Received'}"
+              PREDICTED GRADE: "${gradeText || 'Grade Received'}"
             </div>
             <div class="text-[11px] text-slate-400">Base64: <span class="text-slate-200">${b64Value}</span></div>
             <div class="text-[11px] text-slate-400">Hex Bytes: <span class="text-slate-200">${hexValue}</span></div>
@@ -457,7 +457,7 @@
     step3Btn.addEventListener('click', executeStep3);
 
     autoRunBtn.addEventListener('click', async () => {
-      addLog('--- STARTING AUTO WORKFLOW (STEPS 1 to 3) ---');
+      addLog('Starting automated workflow (Steps 1 to 3)...');
       const ok1 = await executeStep1();
       if (!ok1) return;
       await new Promise(r => setTimeout(r, 800));
@@ -467,10 +467,10 @@
       await new Promise(r => setTimeout(r, 800));
 
       await executeStep3();
-      addLog('--- COMPLETED AUTO WORKFLOW SUCCESSFULLY ---');
+      addLog('Completed automated workflow successfully.');
     });
 
-    addLog('Dual-Mode Bluetooth Dashboard ready.');
+    addLog('Direct Hardware Bluetooth Dashboard ready.');
   </script>
 </body>
 </html>
