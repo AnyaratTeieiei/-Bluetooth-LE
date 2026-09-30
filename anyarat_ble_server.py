@@ -22,6 +22,8 @@ def log(msg, symbol="[OK]"):
 
 async def run_server():
     global current_value
+    main_loop = asyncio.get_running_loop()
+
     print("=" * 68, flush=True)
     print("      ANYARAT BLUETOOTH LE RECEIVER SERVER (GATT Peripheral)", flush=True)
     print("=" * 68, flush=True)
@@ -37,7 +39,6 @@ async def run_server():
 
     provider = res.service_provider
 
-    # Define Characteristic with Read + Write + Write without response
     char_params = gatt.GattLocalCharacteristicParameters()
     char_params.characteristic_properties = (
         gatt.GattCharacteristicProperties.READ |
@@ -71,7 +72,7 @@ async def run_server():
                 log(f"Read handler error: {e}", "[ERROR]")
             finally:
                 deferral.complete()
-        asyncio.create_task(do_read())
+        asyncio.run_coroutine_threadsafe(do_read(), main_loop)
 
     # Step 2: Handle Write Request from Friend (RECEIVE DATA)
     def on_write_sync(sender, args):
@@ -90,7 +91,7 @@ async def run_server():
                     hex_val = raw_bytes.hex(' ')
 
                     print("\n" + "=" * 60, flush=True)
-                    log(f"DATA RECEIVED FROM FRIEND!", "[INCOMING]")
+                    log("DATA RECEIVED FROM FRIEND!", "[INCOMING]")
                     print(f"   Decoded Text: \"{received_str}\"", flush=True)
                     print(f"   Base64:       {b64_val}", flush=True)
                     print(f"   Hex Bytes:    {hex_val}", flush=True)
@@ -108,14 +109,14 @@ async def run_server():
                 log(f"Write handler error: {e}", "[ERROR]")
             finally:
                 deferral.complete()
-        asyncio.create_task(do_write())
+        asyncio.run_coroutine_threadsafe(do_write(), main_loop)
 
     char.add_read_requested(on_read_sync)
     char.add_write_requested(on_write_sync)
 
     log("Read and Write event handlers registered successfully!")
     provider.start_advertising()
-    log("Server is now advertising! Ready to receive data from friends.", "[ACTIVE]")
+    log("Server is now advertising directly via hardware Bluetooth! Ready to receive data.", "[ACTIVE]")
     print("\n>>> WAITING FOR FRIEND TO CONNECT AND SEND DATA (Press Ctrl+C to stop) <<<\n", flush=True)
 
     try:
