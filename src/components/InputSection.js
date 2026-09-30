@@ -1,10 +1,31 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-export default function InputSection({ yourName, setYourName, buddyName, setBuddyName }) {
+export default function InputSection({
+  yourName,
+  setYourName,
+  buddyName,
+  setBuddyName,
+  teacherDeviceName,
+  setTeacherDeviceName,
+}) {
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionHeader}>STUDENT INFORMATION</Text>
+      <Text style={styles.sectionHeader}>STUDENT & DEVICE INFORMATION</Text>
+
+      {/* Teacher's BLE Device Name */}
+      <View style={styles.inputGroup}>
+        <Text style={[styles.label, { color: '#38bdf8' }]}>
+          📡 Teacher's BLE Device Name (ชื่ออุปกรณ์ที่สแกนเจอใน Bluetooth)
+        </Text>
+        <TextInput
+          style={[styles.input, { borderColor: '#0284c7' }]}
+          placeholder="e.g. ESP32-Classroom, BLE_GRADE, etc."
+          placeholderTextColor="#64748b"
+          value={teacherDeviceName}
+          onChangeText={setTeacherDeviceName}
+        />
+      </View>
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Your Name & Student ID</Text>

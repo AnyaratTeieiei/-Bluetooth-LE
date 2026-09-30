@@ -37,9 +37,12 @@
         "react-native-ble-plx",
         {
           "isBackgroundEnabled": false,
-          "modes": ["central"]
+          "modes": [
+            "central"
+          ]
         }
-      ]
+      ],
+      "expo-status-bar"
     ]
   }
 }

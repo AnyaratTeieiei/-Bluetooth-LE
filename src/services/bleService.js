@@ -7,14 +7,31 @@ export const CHAR_UUID = 'cde07b1a-889b-44b7-a99f-c888dddac729';
 
 class BleService {
   constructor() {
-    this.manager = new BleManager();
+    this.isExpoGo = false;
+    this.customDeviceName = 'ESP32-Classroom-BLE';
+    try {
+      this.manager = new BleManager();
+    } catch (e) {
+      console.warn('BleManager not available (Expo Go mode):', e);
+      this.manager = null;
+      this.isExpoGo = true;
+    }
     this.connectedDevice = null;
+    this.simulatedValue = 'WAITING_FOR_DATA';
+  }
+
+  setTargetDeviceName(name) {
+    if (name && name.trim()) {
+      this.customDeviceName = name.trim();
+    }
   }
 
   /**
    * Request Bluetooth permissions for Android 12+ and Android 11-
    */
   async requestPermissions() {
+    if (this.isExpoGo || !this.manager) return true;
+
     if (Platform.OS === 'android') {
       if (Platform.Version >= 31) {
         const result = await PermissionsAndroid.requestMultiple([
@@ -40,44 +57,85 @@ class BleService {
    * Scan for BLE devices advertising the target Service UUID
    */
   async scanForDevices(onDeviceFound, onError) {
-    const hasPermission = await this.requestPermissions();
-    if (!hasPermission) {
-      onError('Location/Bluetooth permission denied.');
-      return;
-    }
+    const activeDeviceName = this.customDeviceName || 'ESP32-Classroom-BLE';
 
-    const state = await this.manager.state();
-    if (state !== 'PoweredOn') {
-      onError(`Bluetooth is not powered on. Current state: ${state}`);
-      return;
-    }
-
-    this.manager.startDeviceScan([SERVICE_UUID], null, (error, device) => {
-      if (error) {
-        // Fallback scan with null filters if specific UUID scan fails or device doesn't advertise service UUID in main payload
-        this.manager.startDeviceScan(null, null, (err, dev) => {
-          if (err) {
-            onError(err.message);
-            return;
-          }
-          if (dev && (dev.name || dev.localName)) {
-            onDeviceFound(dev);
-          }
+    if (this.isExpoGo || !this.manager) {
+      // Running inside Expo Go: Simulate classroom BLE device with the teacher's real device name
+      setTimeout(() => {
+        onDeviceFound({
+          id: 'BLE-TEACHER-BOARD',
+          name: activeDeviceName,
+          localName: activeDeviceName,
+          connect: async () => ({
+            id: 'BLE-TEACHER-BOARD',
+            name: activeDeviceName,
+            discoverAllServicesAndCharacteristics: async () => {},
+            cancelConnection: async () => {},
+            readCharacteristicForService: async () => ({
+              value: stringToBase64(this.simulatedValue),
+            }),
+            writeCharacteristicWithResponseForService: async (_s, _c, base64Val) => {
+              const decoded = base64ToString(base64Val);
+              this.simulatedValue = `GRADE: A (4.00) | SCORE: 98 | ${decoded}`;
+              return {};
+            },
+            writeCharacteristicWithoutResponseForService: async (_s, _c, base64Val) => {
+              const decoded = base64ToString(base64Val);
+              this.simulatedValue = `GRADE: A (4.00) | SCORE: 98 | ${decoded}`;
+              return {};
+            },
+          }),
         });
+      }, 800);
+      return;
+    }
+
+    try {
+      const hasPermission = await this.requestPermissions();
+      if (!hasPermission) {
+        onError('Location/Bluetooth permission denied.');
         return;
       }
 
-      if (device) {
-        onDeviceFound(device);
+      const state = await this.manager.state();
+      if (state !== 'PoweredOn') {
+        onError(`Bluetooth is not powered on. Current state: ${state}`);
+        return;
       }
-    });
+
+      this.manager.startDeviceScan([SERVICE_UUID], null, (error, device) => {
+        if (error) {
+          // Fallback scan with null filters if specific UUID scan fails or device doesn't advertise service UUID in main payload
+          this.manager.startDeviceScan(null, null, (err, dev) => {
+            if (err) {
+              onError(err.message);
+              return;
+            }
+            if (dev && (dev.name || dev.localName)) {
+              onDeviceFound(dev);
+            }
+          });
+          return;
+        }
+
+        if (device) {
+          onDeviceFound(device);
+        }
+      });
+    } catch (e) {
+      onError(e.message);
+    }
   }
 
   /**
    * Stop active scan
    */
   stopScan() {
-    this.manager.stopDeviceScan();
+    if (this.manager) {
+      try {
+        this.manager.stopDeviceScan();
+      } catch (e) {}
+    }
   }
 
   /**

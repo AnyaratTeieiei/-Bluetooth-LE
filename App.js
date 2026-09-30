@@ -9,6 +9,7 @@ import { bleService } from './src/services/bleService';
 export default function App() {
   const [status, setStatus] = useState('Disconnected');
   const [deviceName, setDeviceName] = useState('');
+  const [teacherDeviceName, setTeacherDeviceName] = useState('ESP32-Classroom-BLE');
   const [yourName, setYourName] = useState('Student Name');
   const [buddyName, setBuddyName] = useState('Buddy Name');
   const [isLoading, setIsLoading] = useState(false);
@@ -46,14 +47,16 @@ export default function App() {
     addLog('Scanning for BLE devices matching target Service UUID...');
 
     let targetFound = false;
+    bleService.setTargetDeviceName(teacherDeviceName);
 
     bleService.scanForDevices(
       async (device) => {
         if (!targetFound) {
           targetFound = true;
           bleService.stopScan();
-          const devName = device.name || device.localName || device.id;
+          const devName = device.name || device.localName || teacherDeviceName || device.id;
           setDeviceName(devName);
+          setTeacherDeviceName(devName);
           setStatus('Connecting');
           addLog(`Device discovered: ${devName}. Connecting...`);
 
@@ -171,6 +174,8 @@ export default function App() {
           setYourName={setYourName}
           buddyName={buddyName}
           setBuddyName={setBuddyName}
+          teacherDeviceName={teacherDeviceName}
+          setTeacherDeviceName={setTeacherDeviceName}
         />
 
         <StepCard
