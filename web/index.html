@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bluetooth LE Grade Predictor - Web Bluetooth Edition</title>
+  <title>Bluetooth LE Grade Predictor - Dual Mode</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -23,9 +23,9 @@
         <div>
           <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
             <span>Bluetooth LE Grade Predictor</span>
-            <span class="text-xs bg-sky-500/20 text-sky-400 border border-sky-500/30 px-2.5 py-0.5 rounded-full font-semibold">Web BLE</span>
+            <span class="text-xs bg-sky-500/20 text-sky-400 border border-sky-500/30 px-2.5 py-0.5 rounded-full font-semibold">Dual Mode</span>
           </h1>
-          <p class="text-slate-400 text-sm mt-0.5">Direct Hardware Bluetooth via Google Chrome / Microsoft Edge</p>
+          <p class="text-slate-400 text-sm mt-0.5">Transmitter (Broadcast) & Receiver (Connect) System</p>
         </div>
 
         <!-- Status Badge -->
@@ -35,110 +35,161 @@
         </div>
       </div>
 
-      <!-- Browser BLE Check Notice -->
-      <div id="bleSupportNotice" class="hidden mb-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-300 text-xs flex items-center gap-2">
-        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-        <span>Your browser does not support Web Bluetooth. Please open this page in <b>Google Chrome</b> or <b>Microsoft Edge</b>.</span>
+      <!-- Mode Switcher Tabs -->
+      <div class="flex rounded-xl bg-slate-950 p-1 border border-slate-800 gap-1 mb-4">
+        <button id="tabReceiver" class="flex-1 py-2 text-xs font-bold rounded-lg bg-blue-600 text-white transition flex items-center justify-center gap-1.5">
+          <span>📥</span> <span>Mode 1: ตัวรับสัญญาณ & เชื่อมต่อ (Receiver)</span>
+        </button>
+        <button id="tabTransmitter" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
+          <span>📡</span> <span>Mode 2: ตัวปล่อยสัญญาณ AnyaratBluetooth (Transmitter)</span>
+        </button>
       </div>
 
       <!-- UUID Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3.5">
           <div class="text-[11px] font-bold text-sky-400 tracking-wider uppercase">SERVICE UUID</div>
-          <div class="mono text-xs text-slate-200 mt-1 select-all break-all" id="serviceUuidText">aee04821-1973-4e1f-a590-e84b10d580e7</div>
+          <div class="mono text-xs text-slate-200 mt-1 select-all break-all">aee04821-1973-4e1f-a590-e84b10d580e7</div>
         </div>
         <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3.5">
           <div class="text-[11px] font-bold text-purple-400 tracking-wider uppercase">CHARACTERISTIC UUID</div>
-          <div class="mono text-xs text-slate-200 mt-1 select-all break-all" id="charUuidText">cde07b1a-889b-44b7-a99f-c888dddac729</div>
+          <div class="mono text-xs text-slate-200 mt-1 select-all break-all">cde07b1a-889b-44b7-a99f-c888dddac729</div>
         </div>
       </div>
     </div>
 
-    <!-- 2. Student Info Card -->
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-      <div class="text-xs font-bold text-indigo-400 tracking-wider uppercase">Student Information</div>
-      
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Your Name & Student ID</label>
-          <input type="text" id="yourNameInput" value="Anyarat (65012345)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-sky-500 transition">
+    <!-- ==================== MODE 1: RECEIVER SECTION ==================== -->
+    <div id="receiverSection" class="space-y-5">
+      <!-- Student Info Card -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+        <div class="text-xs font-bold text-indigo-400 tracking-wider uppercase">Student Information</div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Your Name & Student ID</label>
+            <input type="text" id="yourNameInput" value="Anyarat (65012345)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-sky-500 transition">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Buddy's Name & Student ID</label>
+            <input type="text" id="buddyNameInput" value="Buddy Name (65054321)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-sky-500 transition">
+          </div>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Buddy's Name & Student ID</label>
-          <input type="text" id="buddyNameInput" value="Buddy Name (65054321)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-sky-500 transition">
+
+        <div class="text-xs text-slate-400">
+          Payload Preview: <span class="font-bold text-sky-400" id="payloadPreview">"Anyarat (65012345) & Buddy Name (65054321)"</span>
         </div>
       </div>
 
-      <div class="text-xs text-slate-400">
-        Payload Preview: <span class="font-bold text-sky-400" id="payloadPreview">"Anyarat (65012345) & Buddy Name (65054321)"</span>
+      <!-- Workflow Steps Card -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
+        <div class="text-xs font-bold text-emerald-400 tracking-wider uppercase">Assignment Workflow Steps</div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <button id="connectBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/20 active:scale-95 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span id="connectBtnText">1. Connect BLE Device</span>
+          </button>
+
+          <button id="autoRunBtn" disabled class="bg-purple-600 hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-purple-600/20 active:scale-95 flex items-center gap-2">
+            <span>⚡</span> <span>Run Steps 1-3 Auto</span>
+          </button>
+
+          <label class="text-xs text-slate-400 flex items-center gap-2 cursor-pointer ml-auto">
+            <input type="checkbox" id="acceptAllCheckbox" checked class="rounded bg-slate-800 border-slate-700 text-sky-500 focus:ring-0">
+            <span>Scan All Devices (Recommended)</span>
+          </label>
+        </div>
+
+        <!-- Step 1 Box -->
+        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="text-sm font-bold text-white flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-xs flex items-center justify-center font-bold">1</span>
+              <span>STEP 1: Read Characteristic Value</span>
+            </div>
+            <button id="step1Btn" disabled class="bg-blue-600/80 hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition">Read Initial</button>
+          </div>
+          <div id="step1Result" class="text-xs text-slate-400 pt-1">
+            Click 'Read Initial' to capture the value before writing.
+          </div>
+        </div>
+
+        <!-- Step 2 Box -->
+        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="text-sm font-bold text-white flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs flex items-center justify-center font-bold">2</span>
+              <span>STEP 2: Write Name & Buddy Value</span>
+            </div>
+            <button id="step2Btn" disabled class="bg-emerald-600/80 hover:bg-emerald-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition">Write Values</button>
+          </div>
+          <div id="step2Result" class="text-xs text-slate-400 pt-1">
+            Click 'Write Values' to encode and send names to the device.
+          </div>
+        </div>
+
+        <!-- Step 3 Box -->
+        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="text-sm font-bold text-white flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 text-xs flex items-center justify-center font-bold">3</span>
+              <span>STEP 3: Read Grade Prediction</span>
+            </div>
+            <button id="step3Btn" disabled class="bg-amber-600/80 hover:bg-amber-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition">Read Grade</button>
+          </div>
+          <div id="step3Result" class="text-xs text-slate-400 pt-1">
+            Click 'Read Grade' to reveal your predicted grade.
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- 3. Workflow Steps Card -->
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
-      <div class="text-xs font-bold text-emerald-400 tracking-wider uppercase">Assignment Workflow Steps</div>
-
-      <!-- Connection Buttons Row -->
-      <div class="flex flex-wrap items-center gap-3">
-        <button id="connectBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/20 active:scale-95 flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          <span id="connectBtnText">1. Connect BLE Device</span>
-        </button>
-
-        <button id="autoRunBtn" disabled class="bg-purple-600 hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-purple-600/20 active:scale-95 flex items-center gap-2">
-          <span>⚡</span>
-          <span>Run Steps 1-3 Auto</span>
-        </button>
-
-        <!-- Scan Mode Checkbox -->
-        <label class="text-xs text-slate-400 flex items-center gap-2 cursor-pointer ml-auto">
-          <input type="checkbox" id="acceptAllCheckbox" checked class="rounded bg-slate-800 border-slate-700 text-sky-500 focus:ring-0">
-          <span>Scan All Devices (Recommended)</span>
-        </label>
-      </div>
-
-      <!-- Step 1 Box -->
-      <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 space-y-2">
+    <!-- ==================== MODE 2: TRANSMITTER SECTION ==================== -->
+    <div id="transmitterSection" class="hidden space-y-5">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
         <div class="flex items-center justify-between">
-          <div class="text-sm font-bold text-white flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-xs flex items-center justify-center font-bold">1</span>
-            <span>STEP 1: Read Characteristic Value</span>
-          </div>
-          <button id="step1Btn" disabled class="bg-blue-600/80 hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition">Read Initial</button>
+          <div class="text-xs font-bold text-amber-400 tracking-wider uppercase">📡 Transmitter / Broadcaster Mode</div>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">AnyaratBluetooth</span>
         </div>
-        <div id="step1Result" class="text-xs text-slate-400 pt-1">
-          Click 'Read Initial' to capture the value before writing.
-        </div>
-      </div>
 
-      <!-- Step 2 Box -->
-      <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 space-y-2">
-        <div class="flex items-center justify-between">
-          <div class="text-sm font-bold text-white flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs flex items-center justify-center font-bold">2</span>
-            <span>STEP 2: Write Name & Buddy Value</span>
-          </div>
-          <button id="step2Btn" disabled class="bg-emerald-600/80 hover:bg-emerald-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition">Write Values</button>
-        </div>
-        <div id="step2Result" class="text-xs text-slate-400 pt-1">
-          Click 'Write Values' to encode and send names to the device.
-        </div>
-      </div>
+        <p class="text-sm text-slate-300">
+          โหมดนี้สำหรับทำให้ **อุปกรณ์ของคุณยิงสัญญาณบลูทูธออกไปในอากาศ** เพื่อให้เครื่องเพื่อนหรือเครื่องอาจารย์สแกนเจอชื่อ <b class="text-sky-400">"AnyaratBluetooth"</b> ครับ
+        </p>
 
-      <!-- Step 3 Box -->
-      <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 space-y-2">
-        <div class="flex items-center justify-between">
-          <div class="text-sm font-bold text-white flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 text-xs flex items-center justify-center font-bold">3</span>
-            <span>STEP 3: Read Grade Prediction</span>
+        <!-- Option 1: Mobile Broadcast -->
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
+          <div class="flex items-center gap-2 text-sm font-bold text-white">
+            <span class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">📱</span>
+            <span>วิธีที่ 1: ปล่อยจากโทรศัพท์มือถือผ่าน nRF Connect (ขึ้นที่เครื่องเพื่อน 100%)</span>
           </div>
-          <button id="step3Btn" disabled class="bg-amber-600/80 hover:bg-amber-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition">Read Grade</button>
+          <ol class="list-decimal list-inside text-xs text-slate-300 space-y-1.5 pl-1 leading-relaxed">
+            <li>เปิดแอป <b>nRF Connect for Mobile</b> บนโทรศัพท์ของคุณ</li>
+            <li>ไปที่แท็บ <b>"Advertiser"</b> ด้านบน</li>
+            <li>กดปุ่ม <b>+ (Add)</b> ➔ ในช่อง Display Name พิมพ์: <span class="mono text-sky-400 font-bold">AnyaratBluetooth</span></li>
+            <li>กด <b>Add Service</b> ➔ กรอก UUID: <span class="mono text-slate-200">aee04821-1973-4e1f-a590-e84b10d580e7</span></li>
+            <li>สับสวิตช์เปิด <b>Advertising: ON</b></li>
+            <li class="text-emerald-400 font-semibold">เมื่อเพื่อนเปิดสแกน จะพบชื่อ <b>AnyaratBluetooth</b> ปรากฏขึ้นมาทันที!</li>
+          </ol>
         </div>
-        <div id="step3Result" class="text-xs text-slate-400 pt-1">
-          Click 'Read Grade' to reveal your predicted grade.
-        </div>
-      </div>
 
+        <!-- Option 2: PC Discoverable -->
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
+          <div class="flex items-center gap-2 text-sm font-bold text-white">
+            <span class="w-6 h-6 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs">💻</span>
+            <span>วิธีที่ 2: ปล่อยสัญญาณจากคอมพิวเตอร์เครื่องนี้</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            ระบบ Windows จะปล่อยสัญญาณบลูทูธให้เครื่องอื่นเห็นได้อัตโนมัติ เมื่อเปิดหน้าต่าง <b>Bluetooth Settings</b> และตั้งชื่อเครื่องเป็น <b>AnyaratBluetooth</b>
+          </p>
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button onclick="alert('กรุณาเปิดการตั้งค่า Bluetooth ใน Windows เพื่อเปิดโหมด Discoverable ให้เพื่อนสแกนเจอ')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2 rounded-lg transition border border-slate-700">
+              ⚙️ เปิดหน้าต่าง Bluetooth Settings
+            </button>
+          </div>
+        </div>
+
+      </div>
     </div>
 
     <!-- 4. Real-Time Log Console -->
@@ -161,6 +212,26 @@
     let bleCharacteristic = null;
 
     // Elements
+    const tabReceiver = document.getElementById('tabReceiver');
+    const tabTransmitter = document.getElementById('tabTransmitter');
+    const receiverSection = document.getElementById('receiverSection');
+    const transmitterSection = document.getElementById('transmitterSection');
+
+    // Switch Tabs
+    tabReceiver.addEventListener('click', () => {
+      tabReceiver.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-blue-600 text-white transition flex items-center justify-center gap-1.5';
+      tabTransmitter.className = 'flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5';
+      receiverSection.classList.remove('hidden');
+      transmitterSection.classList.add('hidden');
+    });
+
+    tabTransmitter.addEventListener('click', () => {
+      tabTransmitter.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-amber-600 text-white transition flex items-center justify-center gap-1.5';
+      tabReceiver.className = 'flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5';
+      transmitterSection.classList.remove('hidden');
+      receiverSection.classList.add('hidden');
+    });
+
     const connectBtn = document.getElementById('connectBtn');
     const connectBtnText = document.getElementById('connectBtnText');
     const autoRunBtn = document.getElementById('autoRunBtn');
@@ -178,11 +249,6 @@
     const step2Result = document.getElementById('step2Result');
     const step3Result = document.getElementById('step3Result');
     const acceptAllCheckbox = document.getElementById('acceptAllCheckbox');
-
-    // Check Web Bluetooth Support
-    if (!navigator.bluetooth) {
-      document.getElementById('bleSupportNotice').classList.remove('hidden');
-    }
 
     function addLog(msg, isError = false) {
       const now = new Date().toLocaleTimeString();
@@ -226,12 +292,10 @@
       }
     }
 
-    // Convert Buffer/DataView to Hex
     function bufferToHex(buffer) {
       return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join(' ');
     }
 
-    // Convert Buffer to Base64
     function bufferToBase64(buffer) {
       let binary = '';
       const bytes = new Uint8Array(buffer);
@@ -241,7 +305,6 @@
       return window.btoa(binary);
     }
 
-    // Connect / Disconnect Action
     connectBtn.addEventListener('click', async () => {
       if (bluetoothDevice && bluetoothDevice.gatt.connected) {
         addLog('Disconnecting from BLE device...');
@@ -294,7 +357,6 @@
       }
     });
 
-    // STEP 1: Read Initial
     async function executeStep1() {
       if (!bleCharacteristic) return false;
       addLog('STEP 1: Reading Characteristic value...');
@@ -322,7 +384,6 @@
     }
     step1Btn.addEventListener('click', executeStep1);
 
-    // STEP 2: Write Names
     async function executeStep2() {
       if (!bleCharacteristic) return false;
       const p1 = yourNameInput.value.trim();
@@ -364,7 +425,6 @@
     }
     step2Btn.addEventListener('click', executeStep2);
 
-    // STEP 3: Read Grade
     async function executeStep3() {
       if (!bleCharacteristic) return false;
       addLog('STEP 3: Reading Characteristic value again (Predicted Grade)...');
@@ -396,7 +456,6 @@
     }
     step3Btn.addEventListener('click', executeStep3);
 
-    // AUTO RUN (1 to 3)
     autoRunBtn.addEventListener('click', async () => {
       addLog('--- STARTING AUTO WORKFLOW (STEPS 1 to 3) ---');
       const ok1 = await executeStep1();
@@ -411,7 +470,7 @@
       addLog('--- COMPLETED AUTO WORKFLOW SUCCESSFULLY ---');
     });
 
-    addLog('Web Bluetooth Dashboard loaded. Ready to connect.');
+    addLog('Dual-Mode Bluetooth Dashboard ready.');
   </script>
 </body>
 </html>
