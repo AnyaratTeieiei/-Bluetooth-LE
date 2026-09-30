@@ -1,4 +1,4 @@
-﻿import asyncio
+import asyncio
 import uuid
 import sys
 import os
@@ -114,9 +114,13 @@ async def run_server():
     char.add_read_requested(on_read_sync)
     char.add_write_requested(on_write_sync)
 
-    log("Read and Write event handlers registered successfully!")
-    provider.start_advertising()
-    log("Server is now advertising directly via hardware Bluetooth! Ready to receive data.", "[ACTIVE]")
+    adv_params = gatt.GattServiceProviderAdvertisingParameters()
+    adv_params.is_connectable = True
+    adv_params.is_discoverable = True
+    provider.start_advertising_with_parameters(adv_params)
+    log("Server is now advertising directly via hardware Bluetooth (Discoverable & Connectable)! Ready to receive data.", "[ACTIVE]")
+    print(f"Device Name shown on phones/scanners: LAPTOP-00P88UUF (or AnyaratBluetooth)", flush=True)
+    print(f"Service UUID advertised:             {SERVICE_UUID}", flush=True)
     print("\n>>> WAITING FOR FRIEND TO CONNECT AND SEND DATA (Press Ctrl+C to stop) <<<\n", flush=True)
 
     try:
